@@ -16,6 +16,8 @@
 
 package com.example.android.recyclerview;
 
+import android.arch.lifecycle.ViewModelProvider;
+import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
@@ -36,6 +38,7 @@ public class RecyclerViewFragment extends Fragment {
     private static final String KEY_LAYOUT_MANAGER = "layoutManager";
     private static final int SPAN_COUNT = 2;
     private static final int DATASET_COUNT = 60;
+    private MyViewModel mViewModel;
 
     private enum LayoutManagerType {
         GRID_LAYOUT_MANAGER,
@@ -48,7 +51,8 @@ public class RecyclerViewFragment extends Fragment {
     protected RadioButton mGridLayoutRadioButton;
 
     protected RecyclerView mRecyclerView;
-    protected CustomAdapter mAdapter;
+//    protected CustomAdapter mAdapter;
+    protected MyAdapter mAdapter;
     protected RecyclerView.LayoutManager mLayoutManager;
     protected String[] mDataset;
 
@@ -84,10 +88,16 @@ public class RecyclerViewFragment extends Fragment {
         }
         setRecyclerViewLayoutManager(mCurrentLayoutManagerType);
 
-        mAdapter = new CustomAdapter(mDataset);
+//        mAdapter = new CustomAdapter(mDataset);
+        mAdapter = new MyAdapter();
+
+
         // Set CustomAdapter as the adapter for RecyclerView.
         mRecyclerView.setAdapter(mAdapter);
         // END_INCLUDE(initializeRecyclerView)
+
+        mViewModel = ViewModelProviders.of(this.getActivity()).get(MyViewModel.class);
+        mViewModel.getMyList().observe(this, mAdapter::submitList);
 
         mLinearLayoutRadioButton = (RadioButton) rootView.findViewById(R.id.linear_layout_rb);
         mLinearLayoutRadioButton.setOnClickListener(new View.OnClickListener() {
