@@ -81,6 +81,10 @@ public class MyAdapter extends PagedListAdapter<MyItem, MyViewHolder> {
      */
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
+
+        // This is imnportant to get right. call getItem(pos) and not getCurrentList().get(pos)
+        // as it is the absolute position of the item we are receiving, not the position within the
+        // current page.
         MyItem item = this.getItem(position);
         if (item == null) {
             return;
